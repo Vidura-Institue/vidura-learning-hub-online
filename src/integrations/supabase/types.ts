@@ -9,7 +9,107 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      learning_materials: {
+        Row: {
+          content_type: string | null
+          content_url: string | null
+          created_at: string
+          description: string | null
+          grade_level: number
+          id: string
+          subject_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content_type?: string | null
+          content_url?: string | null
+          created_at?: string
+          description?: string | null
+          grade_level: number
+          id?: string
+          subject_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content_type?: string | null
+          content_url?: string | null
+          created_at?: string
+          description?: string | null
+          grade_level?: number
+          id?: string
+          subject_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "learning_materials_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          grade_level: number | null
+          id: string
+          school: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          grade_level?: number | null
+          id?: string
+          school?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          grade_level?: number | null
+          id?: string
+          school?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      subjects: {
+        Row: {
+          created_at: string
+          description: string | null
+          grade_level: number
+          icon_emoji: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          grade_level: number
+          icon_emoji?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          grade_level?: number
+          icon_emoji?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

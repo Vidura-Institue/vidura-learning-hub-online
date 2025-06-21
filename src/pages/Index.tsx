@@ -1,13 +1,35 @@
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Users, Award, Star, ChevronRight, Menu, X, Phone, Mail, MapPin } from "lucide-react";
+import { BookOpen, Users, Award, Star, ChevronRight, Menu, X, Phone, Mail, MapPin, GraduationCap } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Dashboard } from "@/components/Dashboard";
 
 const Index = () => {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+        setLoading(false);
+      }
+    );
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,46 +47,49 @@ const Index = () => {
     setIsMenuOpen(false);
   };
 
-  const featuredCourses = [
-    {
-      title: "Advanced Mathematics",
-      description: "Master calculus, algebra, and advanced mathematical concepts",
-      level: "Advanced",
-      duration: "12 weeks",
-      students: 245,
-      rating: 4.8,
-      price: "Rs. 15,000",
-      image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=250&fit=crop"
-    },
-    {
-      title: "English Literature",
-      description: "Explore classic and contemporary literature with expert guidance",
-      level: "Intermediate",
-      duration: "10 weeks",
-      students: 189,
-      rating: 4.9,
-      price: "Rs. 12,000",
-      image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=250&fit=crop"
-    },
-    {
-      title: "Science & Technology",
-      description: "Comprehensive science curriculum covering physics, chemistry, and biology",
-      level: "All Levels",
-      duration: "16 weeks",
-      students: 312,
-      rating: 4.7,
-      price: "Rs. 18,000",
-      image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=400&h=250&fit=crop"
-    }
-  ];
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (user) {
+    return <Dashboard />;
+  }
 
   const subjects = [
-    { name: "Mathematics", icon: "📐", courses: 24 },
-    { name: "English", icon: "📚", courses: 18 },
-    { name: "Science", icon: "🔬", courses: 32 },
-    { name: "History", icon: "🏛️", courses: 15 },
-    { name: "Geography", icon: "🌍", courses: 12 },
-    { name: "ICT", icon: "💻", courses: 20 }
+    { name: "Mathematics", icon: "🔢", grades: "1-13" },
+    { name: "Sinhala", icon: "🇱🇰", grades: "1-13" },
+    { name: "English", icon: "📚", grades: "1-13" },
+    { name: "Science", icon: "🔬", grades: "6-13" },
+    { name: "History", icon: "🏛️", grades: "6-13" },
+    { name: "ICT", icon: "💻", grades: "6-13" }
+  ];
+
+  const features = [
+    {
+      title: "Grade 1-5 (Primary)",
+      description: "Foundation subjects including Mathematics, Sinhala, English, and Environmental Studies",
+      icon: "👶",
+      materials: "Basic concepts and interactive learning materials"
+    },
+    {
+      title: "Grade 6-11 (Secondary)", 
+      description: "Core subjects for O/L preparation including all major subjects",
+      icon: "📖",
+      materials: "Comprehensive study materials and practice exercises"
+    },
+    {
+      title: "Grade 12-13 (A/L)",
+      description: "Advanced Level subjects for university preparation",
+      icon: "🎓",
+      materials: "In-depth content and exam-focused materials"
+    }
   ];
 
   return (
@@ -89,17 +114,20 @@ const Index = () => {
               <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-blue-600 transition-colors">
                 Home
               </button>
-              <button onClick={() => scrollToSection('courses')} className="text-gray-700 hover:text-blue-600 transition-colors">
-                Courses
+              <button onClick={() => scrollToSection('grades')} className="text-gray-700 hover:text-blue-600 transition-colors">
+                Grades
               </button>
-              <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-blue-600 transition-colors">
-                About
+              <button onClick={() => scrollToSection('subjects')} className="text-gray-700 hover:text-blue-600 transition-colors">
+                Subjects
               </button>
               <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-blue-600 transition-colors">
                 Contact
               </button>
-              <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
-                Get Started
+              <Button 
+                onClick={() => navigate('/auth')}
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+              >
+                Get Started Free
               </Button>
             </div>
 
@@ -119,17 +147,20 @@ const Index = () => {
                 <button onClick={() => scrollToSection('home')} className="text-left text-gray-700 hover:text-blue-600 transition-colors">
                   Home
                 </button>
-                <button onClick={() => scrollToSection('courses')} className="text-left text-gray-700 hover:text-blue-600 transition-colors">
-                  Courses
+                <button onClick={() => scrollToSection('grades')} className="text-left text-gray-700 hover:text-blue-600 transition-colors">
+                  Grades
                 </button>
-                <button onClick={() => scrollToSection('about')} className="text-left text-gray-700 hover:text-blue-600 transition-colors">
-                  About
+                <button onClick={() => scrollToSection('subjects')} className="text-left text-gray-700 hover:text-blue-600 transition-colors">
+                  Subjects
                 </button>
                 <button onClick={() => scrollToSection('contact')} className="text-left text-gray-700 hover:text-blue-600 transition-colors">
                   Contact
                 </button>
-                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 w-full">
-                  Get Started
+                <Button 
+                  onClick={() => navigate('/auth')}
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 w-full"
+                >
+                  Get Started Free
                 </Button>
               </div>
             </div>
@@ -142,29 +173,30 @@ const Index = () => {
         <div className="container mx-auto">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 animate-fade-in">
-              Empowering Education for
+              Free Education for Every
               <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent block mt-2">
-                Future Leaders
+                Sri Lankan Student
               </span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Join thousands of students who have transformed their academic journey with Vidura's 
-              expert-led courses and personalized learning approach.
+              Access comprehensive learning materials for Grade 1-13 completely free. 
+              No fees, no restrictions - just quality education for all.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
                 className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-lg px-8 py-6"
-                onClick={() => scrollToSection('courses')}
+                onClick={() => navigate('/auth')}
               >
-                Explore Courses <ChevronRight className="ml-2 w-5 h-5" />
+                Start Learning Free <ChevronRight className="ml-2 w-5 h-5" />
               </Button>
               <Button 
                 size="lg" 
                 variant="outline" 
                 className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-lg px-8 py-6"
+                onClick={() => scrollToSection('grades')}
               >
-                Learn More
+                Browse Materials
               </Button>
             </div>
           </div>
@@ -173,36 +205,69 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-3xl mx-auto">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-white" />
+                <GraduationCap className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-2">5,000+</h3>
-              <p className="text-gray-600">Students Enrolled</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-2">98%</h3>
-              <p className="text-gray-600">Success Rate</p>
+              <h3 className="text-3xl font-bold text-gray-900 mb-2">Grade 1-13</h3>
+              <p className="text-gray-600">Complete Coverage</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <BookOpen className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-2">150+</h3>
-              <p className="text-gray-600">Expert Teachers</p>
+              <h3 className="text-3xl font-bold text-gray-900 mb-2">100%</h3>
+              <p className="text-gray-600">Free Content</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Award className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-3xl font-bold text-gray-900 mb-2">Quality</h3>
+              <p className="text-gray-600">Sri Lankan Curriculum</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Subjects Section */}
-      <section className="py-16 px-4 bg-white">
+      {/* Grade Levels Section */}
+      <section id="grades" className="py-16 px-4 bg-white">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Subjects</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Learning for Every Grade</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Comprehensive curriculum covering all major subjects with expert guidance
+              Comprehensive educational materials tailored for Sri Lankan curriculum from Grade 1 to 13
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <Card key={index} className="hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
+                <CardHeader className="text-center">
+                  <div className="text-6xl mb-4">{feature.icon}</div>
+                  <CardTitle className="text-xl text-gray-900">{feature.title}</CardTitle>
+                  <CardDescription className="text-gray-600">{feature.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <p className="text-sm text-gray-600 mb-4">{feature.materials}</p>
+                  <Button 
+                    onClick={() => navigate('/auth')}
+                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                  >
+                    Access Materials
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Subjects Section */}
+      <section id="subjects" className="py-16 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Available Subjects</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              All major subjects covered according to Sri Lankan education curriculum
             </p>
           </div>
 
@@ -212,130 +277,33 @@ const Index = () => {
                 <CardContent className="p-6 text-center">
                   <div className="text-4xl mb-4">{subject.icon}</div>
                   <h3 className="font-semibold text-gray-900 mb-2">{subject.name}</h3>
-                  <p className="text-sm text-gray-600">{subject.courses} courses</p>
+                  <Badge variant="secondary" className="text-xs">
+                    Grade {subject.grades}
+                  </Badge>
                 </CardContent>
               </Card>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Featured Courses */}
-      <section id="courses" className="py-16 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Featured Courses</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Discover our most popular courses designed to help you excel in your studies
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredCourses.map((course, index) => (
-              <Card key={index} className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-                <div className="h-48 bg-gradient-to-br from-blue-400 to-indigo-500 relative overflow-hidden">
-                  <img 
-                    src={course.image} 
-                    alt={course.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-4 right-4">
-                    <Badge className="bg-white/90 text-gray-900">{course.level}</Badge>
-                  </div>
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-xl text-gray-900">{course.title}</CardTitle>
-                  <CardDescription className="text-gray-600">{course.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-                    <span>⏱️ {course.duration}</span>
-                    <span>👥 {course.students} students</span>
-                  </div>
-                  <div className="flex items-center mb-4">
-                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="ml-1 text-sm font-medium">{course.rating}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-blue-600">{course.price}</span>
-                    <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
-                      Enroll Now
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-16 px-4 bg-white">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Why Choose Vidura?</h2>
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                At Vidura, we believe in nurturing each student's unique potential through personalized 
-                learning experiences, expert guidance, and innovative teaching methodologies.
-              </p>
-              
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Award className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Expert Teachers</h3>
-                    <p className="text-gray-600">Learn from qualified educators with years of experience and proven track records.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Users className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Small Class Sizes</h3>
-                    <p className="text-gray-600">Personalized attention with limited students per class for optimal learning.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <BookOpen className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Comprehensive Curriculum</h3>
-                    <p className="text-gray-600">Well-structured courses covering all essential topics and practical applications.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-blue-400 to-indigo-500 rounded-2xl overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=600&fit=crop" 
-                  alt="Students learning"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
-                <Award className="w-12 h-12 text-white" />
-              </div>
-            </div>
+          <div className="text-center mt-12">
+            <Button 
+              size="lg"
+              onClick={() => navigate('/auth')}
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+            >
+              Start Learning Now - It's Free!
+            </Button>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
+      <section id="contact" className="py-16 px-4 bg-white">
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Ready to start your learning journey? Contact us today and let's discuss your educational goals.
+              Have questions about our free learning platform? We're here to help!
             </p>
           </div>
 
@@ -358,7 +326,7 @@ const Index = () => {
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Email Us</h3>
                 <p className="text-gray-600">info@vidura.lk</p>
-                <p className="text-gray-600">admissions@vidura.lk</p>
+                <p className="text-gray-600">support@vidura.lk</p>
               </CardContent>
             </Card>
 
@@ -388,7 +356,7 @@ const Index = () => {
                 <span className="text-2xl font-bold">Vidura</span>
               </div>
               <p className="text-gray-400 leading-relaxed">
-                Empowering students to achieve academic excellence through innovative education and personalized learning.
+                Providing free quality education for all Sri Lankan students from Grade 1 to 13.
               </p>
             </div>
             
@@ -396,19 +364,19 @@ const Index = () => {
               <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2 text-gray-400">
                 <li><button onClick={() => scrollToSection('home')} className="hover:text-white transition-colors">Home</button></li>
-                <li><button onClick={() => scrollToSection('courses')} className="hover:text-white transition-colors">Courses</button></li>
-                <li><button onClick={() => scrollToSection('about')} className="hover:text-white transition-colors">About</button></li>
-                <li><button onClick={() => scrollToSection('contact')} className="hover:text-white transition-colors">Contact</button></li>
+                <li><button onClick={() => scrollToSection('grades')} className="hover:text-white transition-colors">Grade Levels</button></li>
+                <li><button onClick={() => scrollToSection('subjects')} className="hover:text-white transition-colors">Subjects</button></li>
+                <li><button onClick={() => navigate('/auth')} className="hover:text-white transition-colors">Sign Up Free</button></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="text-lg font-semibold mb-4">Subjects</h4>
+              <h4 className="text-lg font-semibold mb-4">Grade Levels</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Mathematics</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">English</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Science</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">ICT</a></li>
+                <li><span className="hover:text-white transition-colors">Primary (1-5)</span></li>
+                <li><span className="hover:text-white transition-colors">Secondary (6-11)</span></li>
+                <li><span className="hover:text-white transition-colors">Advanced Level (12-13)</span></li>
+                <li><span className="hover:text-white transition-colors">All Free</span></li>
               </ul>
             </div>
             
@@ -423,7 +391,7 @@ const Index = () => {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Vidura Educational Institute. All rights reserved.</p>
+            <p>&copy; 2024 Vidura Educational Platform. All rights reserved. Free education for all Sri Lankan students.</p>
           </div>
         </div>
       </footer>
