@@ -141,7 +141,7 @@ export const Dashboard = () => {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   Vidura
                 </h1>
-                <p className="text-sm text-gray-600">Free Education for All</p>
+                <p className="text-sm text-gray-600">Education for All</p>
               </div>
             </div>
             
@@ -171,7 +171,7 @@ export const Dashboard = () => {
             Welcome back, {profile?.full_name?.split(' ')[0] || 'Student'}!
           </h2>
           <p className="text-xl text-gray-600">
-            Continue your learning journey with free educational materials
+            Continue your learning journey with educational materials
           </p>
         </div>
 

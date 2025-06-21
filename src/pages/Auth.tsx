@@ -47,10 +47,10 @@ const Auth = () => {
             </span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Free Education for Sri Lankan Students
+            Education for Sri Lankan Students
           </h1>
           <p className="text-gray-600">
-            Access learning materials for Grade 1-13 completely free
+            Access learning materials for Grade 1-13
           </p>
         </div>
         

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { BookOpen, Users, Award, Star, ChevronRight, Menu, X, Phone, Mail, MapPin, GraduationCap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Dashboard } from "@/components/Dashboard";
+import { TeacherRecruitmentModal } from "@/components/TeacherRecruitmentModal";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -59,7 +59,12 @@ const Index = () => {
   }
 
   if (user) {
-    return <Dashboard />;
+    return (
+      <>
+        <TeacherRecruitmentModal />
+        <Dashboard />
+      </>
+    );
   }
 
   const subjects = [
@@ -94,6 +99,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <TeacherRecruitmentModal />
+      
       {/* Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
@@ -127,7 +134,7 @@ const Index = () => {
                 onClick={() => navigate('/auth')}
                 className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
               >
-                Get Started Free
+                Get Started
               </Button>
             </div>
 
@@ -160,7 +167,7 @@ const Index = () => {
                   onClick={() => navigate('/auth')}
                   className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 w-full"
                 >
-                  Get Started Free
+                  Get Started
                 </Button>
               </div>
             </div>
@@ -173,13 +180,13 @@ const Index = () => {
         <div className="container mx-auto">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 animate-fade-in">
-              Free Education for Every
+              Education for Every
               <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent block mt-2">
                 Sri Lankan Student
               </span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Access comprehensive learning materials for Grade 1-13 completely free. 
+              Access comprehensive learning materials for Grade 1-13 completely. 
               No fees, no restrictions - just quality education for all.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -188,7 +195,7 @@ const Index = () => {
                 className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-lg px-8 py-6"
                 onClick={() => navigate('/auth')}
               >
-                Start Learning Free <ChevronRight className="ml-2 w-5 h-5" />
+                Start Learning <ChevronRight className="ml-2 w-5 h-5" />
               </Button>
               <Button 
                 size="lg" 
@@ -215,7 +222,7 @@ const Index = () => {
                 <BookOpen className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-3xl font-bold text-gray-900 mb-2">100%</h3>
-              <p className="text-gray-600">Free Content</p>
+              <p className="text-gray-600">Open Access</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -291,7 +298,7 @@ const Index = () => {
               onClick={() => navigate('/auth')}
               className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
             >
-              Start Learning Now - It's Free!
+              Start Learning Now!
             </Button>
           </div>
         </div>
@@ -303,7 +310,7 @@ const Index = () => {
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Have questions about our free learning platform? We're here to help!
+              Have questions about our learning platform? We're here to help!
             </p>
           </div>
 
@@ -356,7 +363,7 @@ const Index = () => {
                 <span className="text-2xl font-bold">Vidura</span>
               </div>
               <p className="text-gray-400 leading-relaxed">
-                Providing free quality education for all Sri Lankan students from Grade 1 to 13.
+                Providing quality education for all Sri Lankan students from Grade 1 to 13.
               </p>
             </div>
             
@@ -366,7 +373,7 @@ const Index = () => {
                 <li><button onClick={() => scrollToSection('home')} className="hover:text-white transition-colors">Home</button></li>
                 <li><button onClick={() => scrollToSection('grades')} className="hover:text-white transition-colors">Grade Levels</button></li>
                 <li><button onClick={() => scrollToSection('subjects')} className="hover:text-white transition-colors">Subjects</button></li>
-                <li><button onClick={() => navigate('/auth')} className="hover:text-white transition-colors">Sign Up Free</button></li>
+                <li><button onClick={() => navigate('/auth')} className="hover:text-white transition-colors">Sign Up</button></li>
               </ul>
             </div>
             
@@ -376,7 +383,7 @@ const Index = () => {
                 <li><span className="hover:text-white transition-colors">Primary (1-5)</span></li>
                 <li><span className="hover:text-white transition-colors">Secondary (6-11)</span></li>
                 <li><span className="hover:text-white transition-colors">Advanced Level (12-13)</span></li>
-                <li><span className="hover:text-white transition-colors">All Free</span></li>
+                <li><span className="hover:text-white transition-colors">Open Access</span></li>
               </ul>
             </div>
             
@@ -391,7 +398,7 @@ const Index = () => {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Vidura Educational Platform. All rights reserved. Free education for all Sri Lankan students.</p>
+            <p>&copy; 2024 Vidura Educational Platform. All rights reserved. Quality education for all Sri Lankan students.</p>
           </div>
         </div>
       </footer>
