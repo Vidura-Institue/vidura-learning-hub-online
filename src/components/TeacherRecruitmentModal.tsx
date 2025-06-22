@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X, Users, BookOpen, Award } from "lucide-react";
+import { Users, BookOpen, Award } from "lucide-react";
 
 export const TeacherRecruitmentModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,56 +22,82 @@ export const TeacherRecruitmentModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <Users className="w-6 h-6 text-white" />
-              </div>
-              <DialogTitle className="text-xl font-bold text-gray-900">
-                Calling for Teachers!
-              </DialogTitle>
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+              <Users className="w-7 h-7 text-white" />
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleClose}
-              className="h-8 w-8 p-0"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            <DialogTitle className="text-2xl font-bold text-gray-900">
+              Calling for Teachers!
+            </DialogTitle>
           </div>
-          <DialogDescription className="text-left pt-4">
-            <div className="space-y-4">
-              <p className="text-gray-600">
-                Join Vidura and help shape the future of education in Sri Lanka!
-              </p>
+          
+          <DialogDescription className="text-left">
+            <div className="space-y-6">
+              {/* Hero Image */}
+              <div className="w-full h-48 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center overflow-hidden">
+                <img 
+                  src="/lovable-uploads/93eb4d4b-7987-4284-b55c-412ed1254e6d.png" 
+                  alt="Teaching opportunity" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
               
-              <div className="space-y-3">
-                <div className="flex items-start space-x-3">
-                  <BookOpen className="w-5 h-5 text-blue-600 mt-0.5" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Create Content</h4>
-                    <p className="text-sm text-gray-600">Develop learning materials for Grade 1-13 students</p>
+              <div className="text-center">
+                <p className="text-lg text-gray-700 font-medium mb-4">
+                  Join Vidura and help shape the future of education in Sri Lanka!
+                </p>
+                <p className="text-gray-600">
+                  Be part of our mission to provide quality education to thousands of students across the country.
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex flex-col items-center text-center p-4 bg-blue-50 rounded-lg">
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-3">
+                    <BookOpen className="w-8 h-8 text-white" />
                   </div>
+                  <h4 className="font-semibold text-gray-900 mb-2">Create Content</h4>
+                  <p className="text-sm text-gray-600">
+                    Develop engaging learning materials for Grade 1-13 students following Sri Lankan curriculum
+                  </p>
                 </div>
                 
-                <div className="flex items-start space-x-3">
-                  <Award className="w-5 h-5 text-blue-600 mt-0.5" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Make an Impact</h4>
-                    <p className="text-sm text-gray-600">Help thousands of students across Sri Lanka</p>
+                <div className="flex flex-col items-center text-center p-4 bg-indigo-50 rounded-lg">
+                  <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center mb-3">
+                    <Award className="w-8 h-8 text-white" />
                   </div>
+                  <h4 className="font-semibold text-gray-900 mb-2">Make an Impact</h4>
+                  <p className="text-sm text-gray-600">
+                    Help thousands of students achieve their academic goals and build a brighter future
+                  </p>
                 </div>
               </div>
 
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <p className="text-sm text-blue-800 font-medium">
-                  Interested? Contact us at: <br />
-                  📧 teachers@vidura.lk <br />
-                  📞 +94 11 234 5678
-                </p>
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
+                <h4 className="font-bold text-gray-900 mb-3 text-center">Ready to Join Our Team?</h4>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-white text-sm font-bold">@</span>
+                    </div>
+                    <div>
+                      <p className="text-blue-800 font-medium">teachers@vidura.lk</p>
+                      <p className="text-sm text-blue-600">Send us your CV and teaching portfolio</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-white text-sm font-bold">📞</span>
+                    </div>
+                    <div>
+                      <p className="text-green-800 font-medium">+94 11 234 5678</p>
+                      <p className="text-sm text-green-600">Call us for immediate opportunities</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </DialogDescription>
@@ -80,7 +106,7 @@ export const TeacherRecruitmentModal = () => {
         <div className="flex justify-center pt-4">
           <Button 
             onClick={handleClose}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-8 py-3 text-lg font-semibold"
           >
             Continue to Website
           </Button>
